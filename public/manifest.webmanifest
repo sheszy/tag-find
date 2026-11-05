@@ -1,0 +1,17 @@
+{
+  "name": "Tag & Find",
+  "short_name": "Tag & Find",
+  "description": "A thoughtful lost-and-found companion for item owners and finders.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/tag-find-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

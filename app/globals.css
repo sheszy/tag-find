@@ -1,0 +1,91 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+.app-shell {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.frame-shell,
+.app-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  border: 0;
+  background: #f8fafc;
+}
+
+.frame-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 4rem 8rem 1fr;
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: #f8fafc;
+}
+
+.frame-skeleton-header {
+  width: 100%;
+}
+
+.frame-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.frame-skeleton-content {
+  min-height: 12rem;
+}
+
+.skeleton-block {
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .frame-shell,
+  .app-frame,
+  .frame-skeleton {
+    background: #0b1220;
+  }
+
+  .skeleton-block {
+    border-color: #334155;
+    background: linear-gradient(90deg, #263449 25%, #344256 50%, #263449 75%);
+    background-size: 200% 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .frame-skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+}
