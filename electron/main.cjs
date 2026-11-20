@@ -22,7 +22,7 @@ async function createWindow() {
   try {
     appUrl = getAppUrl();
   } catch (error) {
-    dialog.showErrorBox("Tag & Find could not start", error.message);
+    dialog.showErrorBox("Locatelly could not start", error.message);
     app.quit();
     return;
   }

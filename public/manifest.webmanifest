@@ -1,11 +1,11 @@
 {
-  "name": "Tag & Find",
-  "short_name": "Tag & Find",
+  "name": "Locatelly",
+  "short_name": "Locatelly",
   "description": "A thoughtful lost-and-found companion for item owners and finders.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#059669",
+  "background_color": "#f7f0dd",
+  "theme_color": "#1e293b",
   "icons": [
     {
       "src": "/tag-find-icon.svg",

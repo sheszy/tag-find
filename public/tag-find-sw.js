@@ -6,7 +6,7 @@ self.addEventListener("push", event => {
     payload = { body: event.data ? event.data.text() : "" };
   }
 
-  event.waitUntil(self.registration.showNotification(payload.title || "Tag & Find", {
+  event.waitUntil(self.registration.showNotification(payload.title || "Locatelly", {
     body: payload.body || "A nearby lost item may need your help.",
     icon: "/tag-find-icon.svg",
     badge: "/tag-find-icon.svg",

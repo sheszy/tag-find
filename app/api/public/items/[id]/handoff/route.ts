@@ -5,6 +5,7 @@ import {
   hashOwnerToken,
   hashRateLimitKey,
   hasValidOwnerToken,
+  requireSupabaseUser,
   supabaseRest,
   SupabaseRequestError,
 } from "@/lib/tagfind-backend";
@@ -59,6 +60,7 @@ export async function POST(
       if (typeof body.pin !== "string" || !/^\d{4}$/.test(body.pin)) {
         return NextResponse.json({ error: "Enter the 4-digit handoff code." }, { status: 400 });
       }
+      const finder = await requireSupabaseUser(request);
       const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
       const clientAddress = request.headers.get("x-real-ip") || forwardedFor || "unknown";
       await supabaseRest<boolean>("rpc/check_tag_handoff_verify_rate_limit", {
@@ -66,9 +68,17 @@ export async function POST(
         body: JSON.stringify({ p_ip_hash: hashRateLimitKey(`handoff-verify:${clientAddress}`) }),
       });
       const pinHash = createHash("sha256").update(body.pin).digest("hex");
-      const result = await supabaseRest<Array<{ verified: boolean }>>("rpc/complete_tag_handoff", {
+      const result = await supabaseRest<Array<{
+        verified: boolean;
+        coins_awarded: number;
+        coins_balance: number | null;
+      }>>("rpc/complete_tag_handoff", {
         method: "POST",
-        body: JSON.stringify({ p_item_id: id, p_pin_hash: pinHash }),
+        body: JSON.stringify({
+          p_item_id: id,
+          p_pin_hash: pinHash,
+          p_finder_user_id: finder.id,
+        }),
       });
       if (!result[0]?.verified) {
         return NextResponse.json(
@@ -76,7 +86,11 @@ export async function POST(
           { status: 400 },
         );
       }
-      return NextResponse.json({ verified: true });
+      return NextResponse.json({
+        verified: true,
+        coinsAwarded: result[0].coins_awarded,
+        coinsBalance: result[0].coins_balance,
+      });
     }
 
     return NextResponse.json({ error: "A valid handoff action is required." }, { status: 400 });

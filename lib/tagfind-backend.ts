@@ -7,7 +7,7 @@ type SupabaseConfig = {
 
 export class BackendNotConfiguredError extends Error {
   constructor() {
-    super("Cross-device reports need SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY configured on the server.");
+    super("Cloud features need SUPABASE_URL and the required server-side Supabase keys configured.");
     this.name = "BackendNotConfiguredError";
   }
 }
@@ -17,6 +17,50 @@ export class SupabaseRequestError extends Error {
     super(message);
     this.name = "SupabaseRequestError";
   }
+}
+
+export type SupabaseUser = {
+  id: string;
+  email?: string;
+};
+
+function getSupabaseAnonKey(): string {
+  const anonKey = process.env.SUPABASE_ANON_KEY;
+  if (!anonKey) throw new BackendNotConfiguredError();
+  return anonKey;
+}
+
+export async function getSupabaseUser(accessToken: string): Promise<SupabaseUser> {
+  const { url } = getSupabaseConfig();
+  const response = await fetch(`${url}/auth/v1/user`, {
+    cache: "no-store",
+    headers: {
+      apikey: getSupabaseAnonKey(),
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!response.ok) {
+    throw new SupabaseRequestError("Sign in again to continue.", 401);
+  }
+  const user: unknown = await response.json();
+  if (!user || typeof user !== "object" || !("id" in user) || typeof user.id !== "string") {
+    throw new SupabaseRequestError("Supabase returned an invalid account.", 502);
+  }
+  return {
+    id: user.id,
+    ...("email" in user && typeof user.email === "string" ? { email: user.email } : {}),
+  };
+}
+
+export function getBearerToken(request: Request): string | null {
+  const authorization = request.headers.get("authorization");
+  return authorization ? /^Bearer\s+(.+)$/i.exec(authorization)?.[1] ?? null : null;
+}
+
+export async function requireSupabaseUser(request: Request): Promise<SupabaseUser> {
+  const accessToken = getBearerToken(request);
+  if (!accessToken) throw new SupabaseRequestError("Sign in to use account features.", 401);
+  return getSupabaseUser(accessToken);
 }
 
 export function getSupabaseConfig(): SupabaseConfig {

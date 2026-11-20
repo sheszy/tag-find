@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BackendNotConfiguredError, hashOwnerToken, hashRateLimitKey, hasValidOwnerToken, supabaseRest, SupabaseRequestError } from "@/lib/tagfind-backend";
+import { BackendNotConfiguredError, getBearerToken, getSupabaseUser, hashOwnerToken, hashRateLimitKey, hasValidOwnerToken, supabaseRest, SupabaseRequestError } from "@/lib/tagfind-backend";
 
 export const runtime = "nodejs";
 
@@ -8,6 +8,7 @@ type ReportRow = {
   item_id: string;
   notes: string;
   coords: string;
+  claim_session_id: string | null;
   created_at: string;
 };
 
@@ -48,6 +49,8 @@ export async function POST(
   }
 
   try {
+    const accessToken = getBearerToken(request);
+    const finder = accessToken ? await getSupabaseUser(accessToken) : null;
     const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
     const clientAddress = forwardedFor || request.headers.get("x-real-ip") || "unknown";
     const reports = await supabaseRest<ReportRow[]>("rpc/submit_finder_report", {
@@ -57,6 +60,7 @@ export async function POST(
         p_notes: body.notes.trim(),
         p_coords: typeof body.coords === "string" ? body.coords.trim() : "",
         p_ip_hash: hashRateLimitKey(`finder-report:${clientAddress}`),
+        p_finder_user_id: finder?.id ?? null,
       }),
     });
     return NextResponse.json({ report: reports[0] }, { status: 201 });
@@ -96,7 +100,7 @@ export async function GET(
 
     const reportsQuery = new URLSearchParams({
       item_id: `eq.${id}`,
-      select: "id,item_id,notes,coords,created_at",
+      select: "id,item_id,notes,coords,claim_session_id,created_at",
       order: "created_at.desc",
       limit: "100",
     });

@@ -43,7 +43,7 @@ export async function sendNearbyTagPush(
           keys: { p256dh: recipient.p256dh, auth: recipient.auth },
         },
         JSON.stringify({
-          title: "Tag & Find · nearby lost item",
+          title: "Locatelly · nearby lost item",
           body: `${itemName} was reported lost nearby. If you see it, scan its QR tag.`,
           url,
         }),

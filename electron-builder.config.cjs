@@ -7,7 +7,7 @@ if (url.protocol !== "https:" || url.username || url.password) {
 
 module.exports = {
   appId: "com.tagandfind.app",
-  productName: "Tag & Find",
+  productName: "Locatelly",
   directories: { output: "release" },
   files: ["electron/**/*", "package.json"],
   extraMetadata: { tagFindUrl: url.toString().replace(/\/$/, "") },

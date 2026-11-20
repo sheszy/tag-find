@@ -25,7 +25,7 @@ if (appUrl) {
 
 const config: CapacitorConfig = {
   appId: "com.tagandfind.app",
-  appName: "Tag & Find",
+  appName: "Locatelly",
   webDir: "public",
   ...(server ? { server } : {}),
 };

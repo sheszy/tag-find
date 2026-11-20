@@ -20,7 +20,7 @@ body,
   height: 100%;
   min-height: 100dvh;
   border: 0;
-  background: #f8fafc;
+  background: #f7f0dd;
 }
 
 .frame-skeleton {
@@ -31,7 +31,7 @@ body,
   grid-template-rows: 4rem 8rem 1fr;
   gap: 1.25rem;
   padding: clamp(1rem, 3vw, 2rem);
-  background: #f8fafc;
+  background: #f7f0dd;
 }
 
 .frame-skeleton-header {
@@ -49,9 +49,9 @@ body,
 }
 
 .skeleton-block {
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  border: 2px solid #1e293b;
+  border-radius: 0;
+  background: linear-gradient(90deg, #e6dfcc 25%, #f7f0dd 50%, #e6dfcc 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
@@ -74,13 +74,18 @@ body,
   .frame-shell,
   .app-frame,
   .frame-skeleton {
-    background: #0b1220;
+    background: #111827;
   }
 
   .skeleton-block {
-    border-color: #334155;
-    background: linear-gradient(90deg, #263449 25%, #344256 50%, #263449 75%);
+    border-color: #1e293b;
+    background: linear-gradient(90deg, #273449 25%, #334155 50%, #273449 75%);
     background-size: 200% 100%;
+  }
+
+  .frame-shell,
+  .app-frame {
+    background: #f7f0dd;
   }
 }
 
