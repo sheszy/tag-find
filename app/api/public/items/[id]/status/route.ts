@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { BackendNotConfiguredError, hashOwnerToken, hasValidOwnerToken, supabaseRest, SupabaseRequestError } from "@/lib/tagfind-backend";
-import { sendNearbyTagPush } from "@/lib/tagfind-push";
+import { BackendNotConfiguredError, hashOwnerToken, hasValidOwnerToken, supabaseRest, SupabaseRequestError } from "@/lib/Locatelly-backend";
+import { sendNearbyTagPush } from "@/lib/Locatelly-push";
 
 export const runtime = "nodejs";
 

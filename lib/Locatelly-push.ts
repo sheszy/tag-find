@@ -1,6 +1,6 @@
 import webpush from "web-push";
 import { createHash } from "node:crypto";
-import { supabaseRest } from "@/lib/tagfind-backend";
+import { supabaseRest } from "@/lib/Locatelly-backend";
 
 type PushSubscriptionRow = {
   endpoint_hash: string;
