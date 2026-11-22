@@ -1,4 +1,4 @@
-const appUrl = process.env.LOCATELLY_URL || process.env.TAG_FIND_URL;
+const appUrl = process.env.LOCATELLY_URL;
 if (!appUrl) throw new Error("Set LOCATELLY_URL to the deployed HTTPS site before building.");
 const url = new URL(appUrl);
 if (url.protocol !== "https:" || url.username || url.password) {

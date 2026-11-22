@@ -1,6 +1,6 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
-const appUrl = process.env.LOCATELLY_URL || process.env.TAG_FIND_URL;
+const appUrl = process.env.LOCATELLY_URL;
 let server: CapacitorConfig["server"];
 
 if (appUrl) {
