@@ -22,7 +22,7 @@ if (appUrl) {
     if ((!isPrivateIpv4 && !isLocal) || process.env.LOCATELLY_ALLOW_HTTP !== "1") {
       throw new Error("HTTP is allowed only for localhost or a private LAN URL when LOCATELLY_ALLOW_HTTP=1.");
     }
-  }
+    }
   server = {
     url: url.toString().replace(/\/$/, ""),
     cleartext: url.protocol === "http:",
