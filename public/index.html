@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1e293b">
+    <title>Locatelly</title>
+    <style>
+      :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f7f0dd; color: #1e293b; }
+      * { box-sizing: border-box; }
+      body { display: grid; min-height: 100vh; margin: 0; place-items: center; padding: 1.5rem; }
+      main { width: min(100%, 28rem); border: 3px solid #1e293b; background: #fffaf0; padding: 2rem; box-shadow: 8px 8px 0 #1e293b; }
+      h1 { margin: 0; font-size: 1.75rem; }
+      p { line-height: 1.6; }
+      code { overflow-wrap: anywhere; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Locatelly</h1>
+      <p>This is the offline startup screen. To use the app, configure Capacitor to connect to your deployed Locatelly site or a development server on your local network.</p>
+      <p>Set <code>LOCATELLY_URL</code> to that site URL, then run <code>npx cap sync android</code> again.</p>
+    </main>
+  </body>
+</html>
