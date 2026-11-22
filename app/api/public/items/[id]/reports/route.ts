@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BackendNotConfiguredError, getBearerToken, getSupabaseUser, hashOwnerToken, hashRateLimitKey, hasValidOwnerToken, supabaseRest, SupabaseRequestError } from "@/lib/tagfind-backend";
+import { BackendNotConfiguredError, getBearerToken, getSupabaseUser, hashOwnerToken, hashRateLimitKey, hasValidOwnerToken, supabaseRest, SupabaseRequestError } from "@/lib/Locatelly-backend";
 
 export const runtime = "nodejs";
 

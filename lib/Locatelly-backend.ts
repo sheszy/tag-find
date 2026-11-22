@@ -25,7 +25,9 @@ export type SupabaseUser = {
 };
 
 function getSupabaseAnonKey(): string {
-  const anonKey = process.env.SUPABASE_ANON_KEY;
+  const anonKey =
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_PUBLISHABLE_KEY;
   if (!anonKey) throw new BackendNotConfiguredError();
   return anonKey;
 }
@@ -65,7 +67,9 @@ export async function requireSupabaseUser(request: Request): Promise<SupabaseUse
 
 export function getSupabaseConfig(): SupabaseConfig {
   const url = process.env.SUPABASE_URL?.replace(/\/+$/, "");
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const serviceRoleKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SECRET_KEY;
   if (!url || !serviceRoleKey) throw new BackendNotConfiguredError();
 
   const parsedUrl = new URL(url);

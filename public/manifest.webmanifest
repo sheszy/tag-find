@@ -8,7 +8,7 @@
   "theme_color": "#1e293b",
   "icons": [
     {
-      "src": "/tag-find-icon.svg",
+      "src": "/Locatelly.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

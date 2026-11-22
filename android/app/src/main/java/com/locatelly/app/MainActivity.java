@@ -1,4 +1,4 @@
-package com.tagandfind.app;
+package com.locatelly.app;
 
 import com.getcapacitor.BridgeActivity;
 

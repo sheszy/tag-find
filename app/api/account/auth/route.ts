@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BackendNotConfiguredError, getSupabaseConfig } from "@/lib/tagfind-backend";
+import { BackendNotConfiguredError, getSupabaseConfig } from "@/lib/Locatelly-backend";
 
 export const runtime = "nodejs";
 
@@ -40,7 +40,9 @@ export async function POST(request: Request) {
 
   try {
     const { url } = getSupabaseConfig();
-    const anonKey = process.env.SUPABASE_ANON_KEY;
+    const anonKey =
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.SUPABASE_PUBLISHABLE_KEY;
     if (!anonKey) throw new BackendNotConfiguredError();
 
     const endpoint = body.action === "signup"

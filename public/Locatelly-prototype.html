@@ -1326,9 +1326,11 @@
             }
         ];
 
+        migrateLocatellyStorageKeys();
+
         // Global State
-        let items = JSON.parse(localStorage.getItem('tagfind_items')) || DEFAULT_ITEMS;
-        let alerts = JSON.parse(localStorage.getItem('tagfind_alerts')) || DEFAULT_ALERTS;
+        let items = JSON.parse(localStorage.getItem('locatelly_items')) || DEFAULT_ITEMS;
+        let alerts = JSON.parse(localStorage.getItem('locatelly_alerts')) || DEFAULT_ALERTS;
         let activeQrItem = null;
         let activeChatAlertId = null;
         let activeChatSender = 'owner';
@@ -1409,7 +1411,7 @@
 
         function loadPartnerRecords() {
             try {
-                const records = JSON.parse(localStorage.getItem('tagfind_partner_records') || '[]');
+                const records = JSON.parse(localStorage.getItem('locatelly_partner_records') || '[]');
                 if (!Array.isArray(records)) return [];
                 return records.filter(record =>
                     record && typeof record === 'object' &&
@@ -1428,7 +1430,7 @@
 
         function loadFinderLanguage() {
             const requested = new URLSearchParams(window.location.search).get('lang');
-            const saved = requested || localStorage.getItem('tagfind_language');
+            const saved = requested || localStorage.getItem('locatelly_language');
             if (saved && FINDER_TRANSLATIONS[saved]) return saved;
             const browserLanguage = (navigator.language || 'en').slice(0, 2).toLowerCase();
             return FINDER_TRANSLATIONS[browserLanguage] ? browserLanguage : 'en';
@@ -1462,7 +1464,7 @@
         function setFinderLanguage(language) {
             if (!FINDER_TRANSLATIONS[language]) return;
             finderLanguage = language;
-            localStorage.setItem('tagfind_language', language);
+            localStorage.setItem('locatelly_language', language);
             const url = new URL(window.location.href);
             url.searchParams.set('lang', language);
             history.replaceState(null, '', url);
@@ -1506,7 +1508,7 @@
                 const keyResult = await keyResponse.json().catch(() => ({}));
                 if (!keyResponse.ok) throw new Error(keyResult.error || 'Push alerts are not configured on this server.');
                 const position = await getCurrentPosition();
-                const registration = await navigator.serviceWorker.register('/tag-find-sw.js');
+                const registration = await navigator.serviceWorker.register('/Locatelly-sw.js');
                 const subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: urlBase64ToUint8Array(keyResult.publicKey)
@@ -1572,7 +1574,7 @@
 
         function loadAppSettings() {
             try {
-                const savedSettings = localStorage.getItem('tagfind_settings');
+                const savedSettings = localStorage.getItem('locatelly_settings');
                 const settings = savedSettings ? { ...DEFAULT_APP_SETTINGS, ...JSON.parse(savedSettings) } : { ...DEFAULT_APP_SETTINGS };
                 if (!['system', 'light', 'dark'].includes(settings.theme)) settings.theme = 'system';
                 return settings;
@@ -1592,6 +1594,28 @@
                 console.error('Unable to load the saved Locatelly account session:', error);
                 return null;
             }
+        }
+
+        function migrateLocatellyStorageKeys() {
+            const storagePairs = [
+                ['tagfind_items', 'locatelly_items'],
+                ['tagfind_alerts', 'locatelly_alerts'],
+                ['tagfind_partner_records', 'locatelly_partner_records'],
+                ['tagfind_language', 'locatelly_language'],
+                ['tagfind_settings', 'locatelly_settings'],
+            ];
+            for (const [oldKey, newKey] of storagePairs) {
+                if (localStorage.getItem(newKey) === null) {
+                    const oldValue = localStorage.getItem(oldKey);
+                    if (oldValue !== null) localStorage.setItem(newKey, oldValue);
+                }
+                localStorage.removeItem(oldKey);
+            }
+            if (sessionStorage.getItem('locatelly_guest_mode') === null) {
+                const oldGuestMode = sessionStorage.getItem('tagfind_guest_mode');
+                if (oldGuestMode !== null) sessionStorage.setItem('locatelly_guest_mode', oldGuestMode);
+            }
+            sessionStorage.removeItem('tagfind_guest_mode');
         }
 
         function saveAccountSession(session) {
@@ -1711,7 +1735,7 @@
                     expiresAt: Date.now() + Number(result.session.expiresIn || 3600) * 1000
                 });
                 await loadAccountProfile();
-                sessionStorage.removeItem('tagfind_guest_mode');
+                sessionStorage.removeItem('locatelly_guest_mode');
                 activatePrototypeApp();
                 feedback.textContent = `Signed in as ${accountUser.email || email}.`;
                 showToast('Signed in. Your rewards and cosmetics are ready.', 'success');
@@ -1819,15 +1843,15 @@
 
         // Sync with Local Storage
         function saveData() {
-            localStorage.setItem('tagfind_items', JSON.stringify(items));
+            localStorage.setItem('locatelly_items', JSON.stringify(items));
             const persistedAlerts = alerts.map(alert => alert.claimSessionId
                 ? { ...alert, messages: [] }
                 : alert);
-            localStorage.setItem('tagfind_alerts', JSON.stringify(persistedAlerts));
+            localStorage.setItem('locatelly_alerts', JSON.stringify(persistedAlerts));
         }
 
         function savePartnerRecords() {
-            localStorage.setItem('tagfind_partner_records', JSON.stringify(partnerRecords));
+            localStorage.setItem('locatelly_partner_records', JSON.stringify(partnerRecords));
         }
 
         function getPublicItemId(item) {
@@ -2013,7 +2037,7 @@
         }
 
         function enterGuestMode() {
-            sessionStorage.setItem('tagfind_guest_mode', 'active');
+            sessionStorage.setItem('locatelly_guest_mode', 'active');
             activatePrototypeApp();
         }
 
@@ -2062,7 +2086,7 @@
                 } catch (error) {
                     showToast(error.message || 'Could not load this QR tag. Check your connection and try again.', 'error');
                 }
-            } else if (sessionStorage.getItem('tagfind_guest_mode') === 'active') {
+            } else if (sessionStorage.getItem('locatelly_guest_mode') === 'active') {
                 activatePrototypeApp();
             }
             syncRemoteFinderReports().catch(error => {
@@ -2220,7 +2244,7 @@
             } else {
                 appSettings[setting] = Boolean(value);
             }
-            localStorage.setItem('tagfind_settings', JSON.stringify(appSettings));
+            localStorage.setItem('locatelly_settings', JSON.stringify(appSettings));
             applyAppSettings();
         }
 
@@ -4318,8 +4342,8 @@
         }
 
         function resetDemoData() {
-            localStorage.removeItem('tagfind_items');
-            localStorage.removeItem('tagfind_alerts');
+            localStorage.removeItem('locatelly_items');
+            localStorage.removeItem('locatelly_alerts');
             items = [...DEFAULT_ITEMS];
             alerts = [...DEFAULT_ALERTS];
             saveData();

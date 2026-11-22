@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
-import { BackendNotConfiguredError, hashRateLimitKey, supabaseRest, SupabaseRequestError } from "@/lib/tagfind-backend";
+import { BackendNotConfiguredError, hashRateLimitKey, supabaseRest, SupabaseRequestError } from "@/lib/Locatelly-backend";
 
 export const runtime = "nodejs";
 

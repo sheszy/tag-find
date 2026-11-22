@@ -2,9 +2,9 @@ const { app, BrowserWindow, dialog, shell } = require("electron");
 const metadata = require("../package.json");
 
 function getAppUrl() {
-  const configuredUrl = process.env.TAG_FIND_URL || metadata.tagFindUrl;
+  const configuredUrl = process.env.LOCATELLY_URL || process.env.TAG_FIND_URL || metadata.locatellyUrl || metadata.tagFindUrl;
   const appUrl = configuredUrl || (app.isPackaged ? "" : "http://localhost:3000");
-  if (!appUrl) throw new Error("Rebuild this app with TAG_FIND_URL set to your deployed HTTPS site.");
+  if (!appUrl) throw new Error("Rebuild this app with LOCATELLY_URL set to your deployed HTTPS site.");
 
   const url = new URL(appUrl);
   const isLocalDevelopment = !app.isPackaged

@@ -1,6 +1,6 @@
 # Locatelly
 
-Locatelly is a mobile-first lost-and-found app for item owners and finders. The original standalone UI has been restored at `public/tag-find-prototype.html` and is served through the Next.js app so desktop and mobile wrappers can share it.
+Locatelly is a mobile-first lost-and-found app for item owners and finders. The standalone UI is served from `public/Locatelly-prototype.html` through the Next.js app so desktop and mobile wrappers can share it.
 
 ## Run locally
 
@@ -58,9 +58,9 @@ Google OAuth and account-based item syncing are not connected. Supabase email/pa
 
 The Electron and Capacitor scripts load a deployed HTTPS instance of this app.
 
-- Set `TAG_FIND_URL` to a public HTTPS deployment before creating Windows/macOS installers or mobile builds.
+- Set `LOCATELLY_URL` to a public HTTPS deployment before creating Windows/macOS installers or mobile builds.
 - Android builds additionally require Android Studio, its SDK, and Java 21+. `npm run mobile:android:apk` creates a debug APK for device testing.
 - macOS and iOS builds require a Mac with Xcode. iOS distribution also requires Apple signing credentials.
-- A LAN HTTP URL is permitted only for Android development tests with `TAG_FIND_ALLOW_HTTP=1`.
+- A LAN HTTP URL is permitted only for Android development tests with `LOCATELLY_ALLOW_HTTP=1`.
 
 Do not expose secrets through `NEXT_PUBLIC_*` variables or commit `.env.local`.

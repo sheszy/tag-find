@@ -8,8 +8,8 @@ self.addEventListener("push", event => {
 
   event.waitUntil(self.registration.showNotification(payload.title || "Locatelly", {
     body: payload.body || "A nearby lost item may need your help.",
-    icon: "/tag-find-icon.svg",
-    badge: "/tag-find-icon.svg",
+    icon: "/Locatelly.svg",
+    badge: "/Locatelly.svg",
     data: { url: payload.url || "/" },
   }));
 });

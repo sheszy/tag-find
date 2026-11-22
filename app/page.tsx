@@ -9,7 +9,7 @@ export default async function Home({
   const params = new URLSearchParams();
   if (scanId) params.set("scan_id", scanId);
   if (lang) params.set("lang", lang);
-  const prototypeUrl = `/tag-find-prototype.html${params.size ? `?${params}` : ""}`;
+  const prototypeUrl = `/Locatelly-prototype.html${params.size ? `?${params}` : ""}`;
 
   return (
     <main className="app-shell">

@@ -7,7 +7,7 @@ import {
   hasValidOwnerToken,
   supabaseRest,
   SupabaseRequestError,
-} from "@/lib/tagfind-backend";
+} from "@/lib/Locatelly-backend";
 
 export const runtime = "nodejs";
 

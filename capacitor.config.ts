@@ -1,6 +1,6 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
-const appUrl = process.env.TAG_FIND_URL;
+const appUrl = process.env.LOCATELLY_URL || process.env.TAG_FIND_URL;
 let server: CapacitorConfig["server"];
 
 if (appUrl) {
@@ -8,13 +8,13 @@ if (appUrl) {
   try {
     url = new URL(appUrl);
   } catch {
-    throw new Error("TAG_FIND_URL must be an absolute HTTPS URL, or an HTTP URL for local Android testing.");
+    throw new Error("LOCATELLY_URL must be an absolute HTTPS URL, or an HTTP URL for local Android testing.");
   }
   if (url.protocol !== "https:" && url.protocol !== "http:") {
-    throw new Error("TAG_FIND_URL must use HTTPS, or HTTP for local Android testing.");
+    throw new Error("LOCATELLY_URL must use HTTPS, or HTTP for local Android testing.");
   }
   if (url.username || url.password) {
-    throw new Error("TAG_FIND_URL must not contain credentials.");
+    throw new Error("LOCATELLY_URL must not contain credentials.");
   }
   server = {
     url: url.toString().replace(/\/$/, ""),
@@ -24,7 +24,7 @@ if (appUrl) {
 }
 
 const config: CapacitorConfig = {
-  appId: "com.tagandfind.app",
+  appId: "com.locatelly.app",
   appName: "Locatelly",
   webDir: "public",
   ...(server ? { server } : {}),

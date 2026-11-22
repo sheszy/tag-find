@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   applicationName: "Locatelly",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/tag-find-icon.svg",
-    apple: "/tag-find-icon.svg",
+    icon: "/Locatelly.svg",
+    apple: "/Locatelly.svg",
   },
   appleWebApp: {
     capable: true,
