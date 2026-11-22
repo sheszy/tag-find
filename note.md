@@ -32,6 +32,15 @@ Chrome's install button needs the app to be opened from a secure HTTPS deploymen
 4. In **Authentication → Providers**, enable email/password sign-up. Set the Supabase **Site URL** to the eventual HTTPS app domain and add the Vercel production and preview URLs to the allowed redirect URLs if email confirmation is enabled.
 5. Test sign-up, create a new cloud-backed QR item, submit a finder report from a second device, verify a return, and confirm the signed-in finder receives 100 coins. Existing browser-only demo items do not automatically become cloud items; register them again after Supabase is configured.
 
+### Google sign-in provider
+
+1. Create a **Web application** OAuth client in Google Cloud Console.
+2. Add the Locatelly HTTPS origin (and `http://localhost:3000` only for local testing) to the Google OAuth client's **Authorized JavaScript origins**.
+3. In **Supabase → Authentication → Providers → Google**, enable the provider and copy its displayed callback URL (usually `https://<project-ref>.supabase.co/auth/v1/callback`).
+4. Add that exact URL to the Google OAuth client's **Authorized redirect URIs**, then enter the Google client ID and secret in the Supabase Google provider settings. Keep the Google secret in Supabase; it is not a Vercel or browser variable.
+5. In **Supabase → Authentication → URL Configuration**, set the Site URL to the Locatelly HTTPS domain and add `https://<your-app-domain>/auth/callback` to the allowed redirect URLs. Add `http://localhost:3000/auth/callback` only for local development.
+6. The welcome screen and Settings offer **Continue with Google**. The app uses PKCE and returns through `/auth/callback`; test that route on the deployed HTTPS origin.
+
 The account and cloud APIs require these server-side environment variables:
 
 | Variable | Value |
@@ -39,6 +48,8 @@ The account and cloud APIs require these server-side environment variables:
 | `SUPABASE_URL` | Supabase project URL, such as `https://<project-ref>.supabase.co` |
 | `SUPABASE_ANON_KEY` | Supabase anon key (the code also accepts `SUPABASE_PUBLISHABLE_KEY`) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role key (the code also accepts `SUPABASE_SECRET_KEY`) |
+
+Set `NEXT_PUBLIC_APP_URL` to the canonical app origin (`http://localhost:3000` locally or the exact HTTPS Vercel origin). This is a public URL used to validate the Google OAuth callback origin.
 
 Never put the service-role key in a `NEXT_PUBLIC_` variable, source code, or a committed file. Keep `.env.local` private; use `.env.example` only as a list of variable names and placeholders.
 
@@ -60,7 +71,7 @@ There is no Vercel project link or Vercel CLI configured in this workspace yet. 
 
 1. Sign in to Vercel and import the GitHub repository `sheszy/tag-find`.
 2. Keep the project root at the repository root. Let Vercel detect **Next.js**; use `npm install` and `npm run build` if it asks for install/build commands. Do not select static export.
-3. In **Project Settings → Environment Variables**, add the three required Supabase variables above. Select **Preview** for a test deployment and **Production** when ready to launch. Add the three VAPID variables only if testing nearby push.
+3. In **Project Settings → Environment Variables**, add the three required Supabase variables above and set `NEXT_PUBLIC_APP_URL` to the canonical deployment origin. Select **Preview** for a test deployment and **Production** when ready to launch. Add the three VAPID variables only if testing nearby push.
 4. Deploy a Preview build. Vercel will provide an HTTPS URL; add that URL to Supabase Auth's allowed redirect URLs. Keep all Supabase secret values in Vercel's server environment, not in client-prefixed variables.
 5. Open that HTTPS URL in Chrome on Android, go to **Settings → Install Locatelly**, then tap the install button. If Chrome does not present the prompt, use Chrome's **⋮ → Install app** or **Add to Home screen** menu. The installed shortcut can be removed from Android at any time.
 

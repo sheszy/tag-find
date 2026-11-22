@@ -9,7 +9,7 @@ Locatelly is a mobile-first lost-and-found app for item owners and finders. The 
 3. Run `npm run dev`.
 4. Open `http://localhost:3000`.
 
-The welcome screen offers guest mode and Supabase email/password accounts. Items, photos, and guest settings are stored in this browser. Supabase is optional and enables cross-phone finder reports, verified-return coins, and account-synced cosmetics.
+The welcome screen offers guest mode and Supabase email/password or Google sign-in. Google sign-in requires the provider setup below. Items, photos, and guest settings are stored in this browser. Supabase is optional and enables cross-phone finder reports, verified-return coins, and account-synced cosmetics.
 
 ## Enable cross-phone QR reports with Supabase
 
@@ -27,6 +27,17 @@ The welcome screen offers guest mode and Supabase email/password accounts. Items
 5. Enable Supabase Auth email/password sign-up. Restart the Next.js server. Register a new item to create a cloud-backed QR tag; items already in local storage need to be registered again to receive one.
 
 Both Supabase keys are read only by Next.js API routes; never expose or commit the service-role key. Public QR pages expose the item name, category, owner display name, message, and reward; owner contact details are returned only while the item is marked lost. Finder reports remain anonymous unless the finder is signed in, in which case an authenticated claim session enables chat and return rewards without exposing the finder's email to the owner. GPS coordinates are optional and are sent to Supabase only when a finder explicitly attaches a location. Item photos remain on the owner device and are not uploaded.
+
+### Enable Google sign-in
+
+1. Create a Google OAuth client of type **Web application** in Google Cloud Console.
+2. Add the Locatelly HTTPS origin (and `http://localhost:3000` only for local testing) to the Google client's **Authorized JavaScript origins**.
+3. Add the Supabase OAuth callback URL shown in **Supabase → Authentication → Providers → Google** to the Google client's **Authorized redirect URIs**. It normally has the form `https://<project-ref>.supabase.co/auth/v1/callback`.
+4. Enable the Google provider in Supabase and enter the Google client ID and client secret there. Do not put the Google client secret in the app or Vercel.
+5. In **Supabase → Authentication → URL Configuration**, set the Site URL to the deployed Locatelly HTTPS origin and add the callback route `https://<your-app-domain>/auth/callback` to the allowed redirect URLs. For local testing, also allow `http://localhost:3000/auth/callback`.
+6. Use **Continue with Google** on the welcome sign-in screen or in Settings. OAuth uses PKCE and returns to the app's callback route before saving the account session on that device.
+
+Set `NEXT_PUBLIC_APP_URL` to the canonical app origin (`http://localhost:3000` locally, or the exact HTTPS Vercel origin for a deployment). It is a public URL, not a secret, and is used to validate the OAuth callback origin.
 
 ## Recovery and community features
 
@@ -52,7 +63,7 @@ The owner dashboard polls for new reports while open (about every 30 seconds). P
 - A thumb-friendly finder action bar, 48px minimum controls, native dark-mode styling, and reduced-motion support.
 - Pixel-art styling, light/dark/system appearance modes, plus account-synced shop themes and QR cosmetics.
 
-Google OAuth and account-based item syncing are not connected. Supabase email/password accounts are used for rewards and cosmetics; item records remain in their current guest/browser storage model. The QR flow supports cross-phone reports only for new items registered after Supabase is configured; older demo/local items remain local.
+Supabase email/password and Google sign-in are used for rewards and cosmetics; item records remain in their current guest/browser storage model. The QR flow supports cross-phone reports only for new items registered after Supabase is configured; older demo/local items remain local.
 
 ## Desktop and mobile wrappers
 
